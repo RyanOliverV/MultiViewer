@@ -6,7 +6,6 @@ $(document).ready(function() {
   let player;
   let players = [];
 
-
   // Load the YT library
   var tag = document.createElement('script');
   tag.src = "https://www.youtube.com/iframe_api";
@@ -34,6 +33,22 @@ displayButton.addEventListener("click", function() {
   players.push(player);
 
   init();
+      // Add the Ajax call here
+      $.ajax({
+        type: "POST",
+        url: `/video-board/${user_id}`,
+        data: { 
+          video_id: videoID,
+          user_id,
+          position:outerDiv.style.transform,
+        },
+        success: function(response) {
+          console.log("Video URL added to the database successfully");
+        },
+        error: function(error) {
+          console.error("Error adding the video URL to the database:", error);
+        }
+    });
 });
 
 function onPlayerReady(event) {
@@ -110,7 +125,24 @@ function parseYouTubeTime(time) {
       },
       onRelease: function() {
         $(this.target).removeClass('ui-resizable-resizing');
-      }
+      },
+      onDragEnd: function() {
+        let videoID = displayInput.value.split("watch?v=")[1];
+        let x = this.x, y = this.y;
+        // send x, y position to the server
+        $.ajax({
+            type: "POST",
+            url: `/video-board/${user_id}`,
+            data: {
+                video_url: videoID,
+                user_id,
+                position: { x: x, y: y },
+            },
+            success: function(data) {
+                console.log("Position sent to the server!");
+            }
+        });
+    }
     });
   }
 });

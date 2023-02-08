@@ -9,13 +9,18 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const { video_url, user_id, position } = req.body;
-    video.create(req, res, { video_url, user_id, position })
+    video.create(req, res);
 });
 
 router.get('/:id', (req, res) => {
     const user_id = req.params.id;
     res.render('video-board', { user_id });
+});
+
+router.put('/:id', (req, res) => {
+    const { id } = req.params;
+    const { video_url, user_id, position } = req.body;
+    video.update(req, res, id, { video_url, user_id, position });
 });
 
 module.exports = router;
