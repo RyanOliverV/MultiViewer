@@ -4,7 +4,7 @@ module.exports = {
     create: async (req, res) => {
         console.log("create",req.body);
         const { video_url, position } = req.body;
-        const newVideo = await Video.create({ video_url, position })
+        const newVideo = await Video.create({ videoURL:video_url, position:position })
         return newVideo
       },
       

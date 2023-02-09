@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
     user.create(req, res);
 });
 
-router.post('/', (req, res) => {
+router.post('/:id', (req, res) => {
     video.create(req, res);
 });
 
