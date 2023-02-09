@@ -38,7 +38,7 @@ displayButton.addEventListener("click", function() {
         type: "POST",
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
-        url: `/${user_id}`,
+        url: `/video-board/${user_id}`,
         data: JSON.stringify({
           video_id: videoID,
           position: outerDiv.style.transform,
