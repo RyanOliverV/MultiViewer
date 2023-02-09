@@ -41,7 +41,7 @@ app.use('/video-board', videoBoard);
 const db = require('./models');
 
 (async () => {
-    await db.sequelize.sync();
+    await db.sequelize.sync(/*{force:true}*/);
 })();
 
 //Port
