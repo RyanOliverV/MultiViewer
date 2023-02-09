@@ -18,7 +18,7 @@ router.get('/:id', (req, res) => {
 
 router.put('/:id', (req, res) => {
     const { id } = req.params;
-    const { video_url, user_id, position } = req.body;
+    const { video_url, position } = req.body;
     video.update({ video_url, position },
         {
             where: {
