@@ -1,28 +1,35 @@
 const { models: { Video } } = require('../models');
 
 module.exports = {
-    create: (req, res) => {
+    create: async (req, res) => {
         const { video_url, user_id, position } = req.body;
-        Video.create({ video_url, user_id, position })
+        
+        const newVideo = await Video.create({ video_url, user_id, position })
+        return newVideo
       },
       
-      getAllVideos: (req, res) => {
-        Video.findAll()
+      getAllVideos: async (req, res) => {
+        
+        const videos = await Video.findAll()
+        return videos
       },
       
-      getVideoById: (req, res) => {
+      getVideoById: async (req, res) => {
         const { id } = req.params;
-        Video.findByPk(id)
+        
+        const video = await Video.findByPk(id)
+        return video
       },
       
-      update: (req, res) => {
+      update: async (req, res) => {
         const { id } = req.params;
         const { video_url, user_id, position } = req.body;
-        Video.update({ video_url, user_id, position }, { where: { id } })
+        const video = await Video.update({ video_url, user_id, position }, { where: { id } })
+        return video
       },
       
-      delete: (req, res) => {
+      delete: async (req, res) => {
         const { id } = req.params;
-        Video.destroy({ where: { id } })
+        await Video.destroy({ where: { id } })
       },
 }
