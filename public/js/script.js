@@ -140,6 +140,9 @@ function parseYouTubeTime(time) {
             },
             success: function(data) {
                 console.log("Position sent to the server!");
+            },
+            error: function(error) {
+              console.error("Error adding the position to the database:", error);
             }
         });
     }
