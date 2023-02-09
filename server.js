@@ -18,8 +18,6 @@ app.use(express.json()); //allows us to use json
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-const users = require('./routes/users');
-const login = require('./routes/login')
 const videoBoard = require('./routes/video-board');
 
 app.get('/', (req, res) => {
@@ -27,8 +25,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/video-board', videoBoard);
-app.use('/users', users);
-app.use('/login', login);
 
 //Database
 const db = require('./models');
