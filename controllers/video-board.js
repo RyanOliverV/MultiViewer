@@ -2,9 +2,8 @@ const { models: { Video } } = require('../models');
 
 module.exports = {
     create: async (req, res) => {
-        //console.log(req.body);
+        console.log("create",req.body);
         const { video_url, position } = req.body;
-        
         const newVideo = await Video.create({ video_url, position })
         return newVideo
       },
