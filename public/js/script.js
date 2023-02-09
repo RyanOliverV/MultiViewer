@@ -14,6 +14,7 @@ $(document).ready(async function() {
 
 displayButton.addEventListener("click", function() {
   let videoID = displayInput.value.split("watch?v=")[1];
+  let videoURL = displayInput.value;
   let innerDiv = document.createElement("div");
   innerDiv.className = "inner";
   innerDiv.id = "video-" + players.length;
@@ -39,10 +40,11 @@ displayButton.addEventListener("click", function() {
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
         url: `/video-board/${user_id}`,
-        data: JSON.stringify({
+        data: {video:JSON.stringify({
           video_id: videoID,
+          video_url:videoURL,
           position: outerDiv.style.transform,
-        }),
+        })},
         success: function(response) {
           console.log("Video URL added to the database successfully");
         },
@@ -128,17 +130,17 @@ function parseYouTubeTime(time) {
         $(this.target).removeClass('ui-resizable-resizing');
       },
       onDragEnd: function() {
-        let videoID = displayInput.value.split("watch?v=")[1];
+        let videoURL = displayInput.value;
         let x = this.x, y = this.y;
         // send x, y position to the server
         $.ajax({
             type: "PUT",
             url: `/video-board/${user_id}`,
-            data: JSON.stringify({
-                video_url: videoID,
+            data:{videoBoard:JSON.stringify({
+                video_url: videoURL,
                 user_id,
-                position: { x: x, y: y },
-            }),
+                position: JSON.stringify({ x: x, y: y }),
+            })},
             success: function(data) {
                 console.log("Position sent to the server!");
             },

@@ -2,9 +2,10 @@ const { models: { Video } } = require('../models');
 
 module.exports = {
     create: async (req, res) => {
-        console.log("create",req.body);
-        const { video_url, position } = req.body;
-        const newVideo = await Video.create({ video_url, position })
+        const body = JSON.parse(req.body.video)
+        const user_id = req.params.id;
+        const { video_url, position } = body;
+        const newVideo = await Video.create({ videoURL:video_url, position,user_id })
         return newVideo
       },
       
@@ -23,10 +24,16 @@ module.exports = {
       },
       
       update: async (req, res) => {
-        const obj = JSON.parse(JSON.stringify(req));
-        const { id } = obj;
-        const { video_url, position } = obj;
-        const video = await Video.update({ video_url, position }, { where: { id } })
+        const body  = JSON.parse(req.body.videoBoard);
+        let allVids = await Video.findAll();
+        /*console.log(allVids);
+        console.log("Before",allVids);
+        console.log("body",body);*/
+        const { id } = req.params;
+        const { video_url, position } = body;
+        const video = await Video.update({ videoURL:video_url, position }, { where: { user_id:id,videoURL:video_url } })
+         allVids = await Video.findAll();
+        //console.log("After",allVids);
         return video
       },
       

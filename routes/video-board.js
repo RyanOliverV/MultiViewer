@@ -16,15 +16,12 @@ router.get('/:id', (req, res) => {
     res.render('video-board', { user_id });
 });
 
-router.put('/:id', (req, res) => {
-    const { id } = req.params;
-    const { video_url, position } = req.body;
-    video.update({ video_url, position },
-        {
-            where: {
-                id
-            }
-        });
+router.put('/:id', async(req, res) => {
+    console.log("Router",req.body)
+    // const { id } = req.params;
+    // const { video_url, position } = req.body;
+    await video.update(req);
+    res.sendStatus(200)
 });
 
 module.exports = router;
