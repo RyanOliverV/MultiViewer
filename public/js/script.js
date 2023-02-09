@@ -34,13 +34,11 @@ displayButton.addEventListener("click", function() {
 
   init();
       // Add the Ajax call here
-      console.log(videoID);
-      console.log(outerDiv.style.transform = "translate3d(100px, 100px, 0)");
       $.ajax({
-        type: "PUT",
+        type: "POST",
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
-        url: `/video-board/${user_id}`,
+        url: `/${user_id}`,
         data: JSON.stringify({
           video_id: videoID,
           position: outerDiv.style.transform,
@@ -178,5 +176,4 @@ function parseYouTubeTime(time) {
   }
 
   const videos = await preLoad();
-  console.log(videos);
 });
