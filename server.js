@@ -35,7 +35,7 @@ const logger = (req, res, next) => {
     next();
 };
 
-app.use('/video-board', logger, videoBoard);
+app.use('/video-board', videoBoard);
 
 //Database
 const db = require('./models');

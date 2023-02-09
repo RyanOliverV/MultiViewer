@@ -5,10 +5,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         get() {
-            return this.getDataValue('video_id').split(';')
+            return this.getDataValue('videoURL').split(';')
         },
         set(val) {
-           this.setDataValue('video_id',val.join(';'));
+           this.setDataValue('videoURL',val.join(';'));
         },
     },
     position: {

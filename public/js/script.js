@@ -116,7 +116,6 @@ function parseYouTubeTime(time) {
   return seconds;
 }
 
-
   function init() {
     // the ui-resizable-handles are added here
     $('.resizable').resizable();
