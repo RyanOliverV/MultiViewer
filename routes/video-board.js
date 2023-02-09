@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
-const { video } = require('../../controllers');
+const { video } = require('../controllers');
 
 router.get('/', (req, res) => {
     const user_id = uuidv4();
