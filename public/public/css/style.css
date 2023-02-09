@@ -1,0 +1,81 @@
+body {
+  background: rgb(73, 137, 174);
+  overflow: hidden;
+}
+
+.draggable {
+  box-shadow: 0 0 4px 0 #000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 50px;
+  width: 30vw;
+  min-height: 50px;
+  height: 50vh;
+  background: rgb(95, 93, 93);
+  padding-top: 20px;
+}
+
+.ui-resizable-resizing::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 200%;
+  width: 200%;
+  margin: -50% -50%;
+}
+
+.handleBar span {
+  display: block;
+  position: absolute;
+  width: calc(100% - 28px);
+  height: calc(100% - 8px);
+  overflow: hidden;
+}
+
+.inner {
+  width: 100%;
+  height: 100%;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-top: 1px solid black;
+}
+
+.video-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  background-color: gainsboro;
+  height: 200px;
+  width: 400px;
+  border-radius: 40px;
+}
+
+input:not([type='submit']) {
+  width: 250px;
+  height: 25px;
+  border-radius: 5px;
+  border: transparent;
+  padding: 2px 0 2px 5px;
+  margin: 10px 0;
+}
+
+input[type='submit'] {
+  font-size: 1.2em;
+  border: none;
+  margin-top: 5px;
+  border-radius: 5px;
+}
