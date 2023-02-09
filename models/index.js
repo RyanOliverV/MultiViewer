@@ -10,5 +10,6 @@ const db = {};
 db.sequelize = sequelize;
 db.models = {};
 db.models.Video = require('./video-board') (sequelize, Sequelize.DataTypes);
+db.models.User = require('./user') (sequelize, Sequelize.DataTypes);
 
 module.exports = db;

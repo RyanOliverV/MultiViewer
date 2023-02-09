@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(async function() {
   let displayInput = document.getElementById("video-url");
   let displayButton = document.getElementById("display-video");
   let containerDiv = document.getElementById("video-container");
@@ -34,14 +34,17 @@ displayButton.addEventListener("click", function() {
 
   init();
       // Add the Ajax call here
+      console.log(videoID);
+      console.log(outerDiv.style.transform = "translate3d(100px, 100px, 0)");
       $.ajax({
-        type: "POST",
+        type: "PUT",
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
         url: `/video-board/${user_id}`,
-        data: { 
+        data: JSON.stringify({
           video_id: videoID,
-          user_id,
-          position:outerDiv.style.transform,
-        },
+          position: outerDiv.style.transform,
+        }),
         success: function(response) {
           console.log("Video URL added to the database successfully");
         },
@@ -113,6 +116,7 @@ function parseYouTubeTime(time) {
   return seconds;
 }
 
+
   function init() {
     // the ui-resizable-handles are added here
     $('.resizable').resizable();
@@ -131,13 +135,13 @@ function parseYouTubeTime(time) {
         let x = this.x, y = this.y;
         // send x, y position to the server
         $.ajax({
-            type: "POST",
+            type: "PUT",
             url: `/video-board/${user_id}`,
-            data: {
+            data: JSON.stringify({
                 video_url: videoID,
                 user_id,
                 position: { x: x, y: y },
-            },
+            }),
             success: function(data) {
                 console.log("Position sent to the server!");
             },
@@ -148,4 +152,32 @@ function parseYouTubeTime(time) {
     }
     });
   }
+
+  async function preLoad() {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: "get",
+        url: `/video-board/?=${user_id}`,
+        // data: {
+        //     video_url: videoID,
+        //     user_id,
+        //     position: { x: x, y: y },
+        // },
+        success: function(data) {
+            console.log("Position sent to the server!");
+            // Create more videos, with the videos we get back.
+            // const videos = data.videos
+            // console.log(videos)
+            resolve(data)
+        },
+        error: function(error) {
+          console.error("Error adding the position to the database:", error);
+          reject(error)
+        }
+    });
+    })
+  }
+
+  const videos = await preLoad();
+  console.log(videos);
 });

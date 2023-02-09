@@ -1,28 +1,40 @@
 const { models: { Video } } = require('../models');
 
 module.exports = {
-    create: (req, res) => {
-        const { video_url, user_id, position } = req.body;
-        Video.create({ video_url, user_id, position })
+    create: async (req, res) => {
+        console.log(req.body);
+        const { video_url, position } = req.body;
+        
+        const newVideo = await Video.create({ video_url, position })
+        return newVideo
       },
       
-      getAllVideos: (req, res) => {
-        Video.findAll()
+      getAllVideos: async (req, res) => {
+        
+        const videos = await Video.findAll()
+        console.log(videos);
+        return videos
       },
       
-      getVideoById: (req, res) => {
-        const { id } = req.params;
-        Video.findByPk(id)
+      getVideoById: async (req, res) => {
+        const { id } = req.body;
+        
+        const video = await Video.findByPk(id)
+        return video
       },
       
-      update: (req, res) => {
-        const { id } = req.params;
-        const { video_url, user_id, position } = req.body;
-        Video.update({ video_url, user_id, position }, { where: { id } })
+      update: async (req, res) => {
+        console.log('data');
+        const obj = JSON.parse(JSON.stringify(req));
+        console.log(obj);
+        const { id } = obj;
+        const { video_url, position } = obj;
+        const video = await Video.update({ video_url, position }, { where: { id } })
+        return video
       },
       
-      delete: (req, res) => {
-        const { id } = req.params;
-        Video.destroy({ where: { id } })
+      delete: async (req, res) => {
+        const { id } = req.body;
+        await Video.destroy({ where: { id } })
       },
 }

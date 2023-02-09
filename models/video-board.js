@@ -1,13 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
     
     const Video = sequelize.define('video', {
-    video_url: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    user_id: {
-      type: DataTypes.STRING,
-      allowNull: false
+      videoURL: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        get() {
+            return this.getDataValue('video_id').split(';')
+        },
+        set(val) {
+           this.setDataValue('video_id',val.join(';'));
+        },
     },
     position: {
       type: DataTypes.JSON,

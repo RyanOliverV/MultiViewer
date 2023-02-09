@@ -3,6 +3,7 @@ require('dotenv').config() //allows us to use .env file, keep at top
 const express =  require('express');
 const app = express();
 const path = require('path');
+var bodyParser = require('body-parser')
 
 //set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -14,8 +15,13 @@ app.use(express.static(__dirname + '/public/css'));
 app.use(express.static(__dirname + '/public/js'));
 
 // Middleware
-app.use(express.json()); //allows us to use json
-app.use(express.urlencoded({ extended: true }));
+
+var jsonParser = bodyParser.json()
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+app.use(jsonParser);
+app.use(urlencodedParser);
 
 // Routes
 const videoBoard = require('./routes/video-board');
@@ -24,7 +30,12 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.use('/video-board', videoBoard);
+const logger = (req, res, next) => {
+    console.log(req);
+    next();
+};
+
+app.use('/video-board', logger, videoBoard);
 
 //Database
 const db = require('./models');
