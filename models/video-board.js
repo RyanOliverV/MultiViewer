@@ -1,11 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
     
     const Video = sequelize.define('video', {
-      id: {
+
+    id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+    primaryKey: true
       },
+
       videoURL: {
         type: DataTypes.STRING,
         allowNull: false,
