@@ -19,6 +19,7 @@ displayButton.addEventListener("click", function() {
   innerDiv.className = "inner";
   innerDiv.id = "video-" + players.length;
   let outerDiv = document.createElement("div");
+  outerDiv.id = "videoStyle";
   outerDiv.className = "draggable resizable";
   outerDiv.style.transform = "translate3d(100px, 100px, 0)";
   outerDiv.appendChild(innerDiv);
@@ -44,6 +45,8 @@ displayButton.addEventListener("click", function() {
           video_id: videoID,
           video_url:videoURL,
           position: outerDiv.style.transform,
+          width: outerDiv.offsetWidth,
+          height: outerDiv.offsetHeight
         })},
         success: function(response) {
           console.log("Video URL added to the database successfully");
@@ -121,6 +124,33 @@ function parseYouTubeTime(time) {
     $('.resizable').resizable();
     // makes GSAP Draggable avoid clicks on the resize handles
     $('.ui-resizable-handle').attr('data-clickable', true);
+
+    $( '.resizable' ).resizable({
+      stop: function( event, ui ) {
+        let videoURL = displayInput.value;
+        let getVideo = document.getElementById("videoStyle");
+        let videoPosition = getVideo.style.transform;
+        let videoWidth = getVideo.offsetWidth;
+        let videoHeight = getVideo.offsetHeight
+        $.ajax({
+          type: "PUT",
+          url: `/video-board/${user_id}`,
+          data:{videoBoard:JSON.stringify({
+              video_url: videoURL,
+              user_id,
+              position: videoPosition,
+              width: videoWidth,
+              height: videoHeight
+          })},
+          success: function(data) {
+              console.log("Size sent to the server!");
+          },
+          error: function(error) {
+            console.error("Error adding the position to the database:", error);
+          }
+      });
+      }
+  });
     // make the element draggable
     Draggable.create('.draggable', {
       onPress: function () {
@@ -132,6 +162,10 @@ function parseYouTubeTime(time) {
       onDragEnd: function() {
         let videoURL = displayInput.value;
         let x = this.x, y = this.y;
+        let getVideo = document.getElementById("videoStyle");
+        let videoPosition = getVideo.style.transform;
+        let videoWidth = getVideo.offsetWidth;
+        let videoHeight = getVideo.offsetHeight
         // send x, y position to the server
         $.ajax({
             type: "PUT",
@@ -139,7 +173,9 @@ function parseYouTubeTime(time) {
             data:{videoBoard:JSON.stringify({
                 video_url: videoURL,
                 user_id,
-                position: JSON.stringify({ x: x, y: y }),
+                position: videoPosition,
+                width: videoWidth,
+                height: videoHeight
             })},
             success: function(data) {
                 console.log("Position sent to the server!");
