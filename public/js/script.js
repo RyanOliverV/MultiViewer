@@ -12,55 +12,55 @@ $(document).ready(async function() {
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-displayButton.addEventListener("click", function() {
-  addVideo();
-});
-
-function addVideo() {
-  let videoID = displayInput.value.split("watch?v=")[1];
-  let videoURL = displayInput.value;
-  let innerDiv = document.createElement("div");
-  innerDiv.className = "inner";
-  innerDiv.id = "video-" + players.length;
-  let outerDiv = document.createElement("div");
-  outerDiv.id = "videoStyle";
-  outerDiv.className = "draggable resizable";
-  outerDiv.style.transform = "translate3d(100px, 100px, 0)";
-  outerDiv.appendChild(innerDiv);
-  containerDiv.appendChild(outerDiv);
-
-  player = new YT.Player("video-" + players.length, {
-    height: "100%",
-    width: "100%",
-    videoId: videoID,
+  displayButton.addEventListener("click", function() {
+    addVideo();
   });
   
-  player.addEventListener("onReady", onPlayerReady);
-  players.push(player);
-
-  init();
-
-  // Add the Ajax call here
-  $.ajax({
-    type: "POST",
-    dataType: 'json',
-    contentType: 'application/x-www-form-urlencoded',
-    url: `/video-board/${user_id}`,
-    data: {video:JSON.stringify({
-      video_id: videoID,
-      video_url:videoURL,
-      position: outerDiv.style.transform,
-      width: outerDiv.offsetWidth,
-      height: outerDiv.offsetHeight
-    })},
-    success: function(response) {
-      console.log("Video URL added to the database successfully");
-    },
-    error: function(error) {
-      console.error("Error adding the video URL to the database:", error);
-    }
-});
-}
+  function addVideo() {
+    let videoID = displayInput.value.split("watch?v=")[1];
+    let videoURL = displayInput.value;
+    let innerDiv = document.createElement("div");
+    innerDiv.className = "inner";
+    innerDiv.id = "video-" + players.length;
+    let outerDiv = document.createElement("div");
+    outerDiv.id = "videoStyle";
+    outerDiv.className = "draggable resizable";
+    outerDiv.style.transform = "translate3d(100px, 100px, 0)";
+    outerDiv.appendChild(innerDiv);
+    containerDiv.appendChild(outerDiv);
+  
+    player = new YT.Player("video-" + players.length, {
+      height: "100%",
+      width: "100%",
+      videoId: videoID,
+    });
+    
+    player.addEventListener("onReady", onPlayerReady);
+    players.push(player);
+  
+    init();
+  
+    // Add the Ajax call here
+    $.ajax({
+      type: "POST",
+      dataType: 'json',
+      contentType: 'application/x-www-form-urlencoded',
+      url: `/video-board/${user_id}`,
+      data: {video:JSON.stringify({
+        video_id: videoID,
+        video_url:videoURL,
+        position: outerDiv.style.transform,
+        width: outerDiv.offsetWidth,
+        height: outerDiv.offsetHeight
+      })},
+      success: function(response) {
+        console.log("Video URL added to the database successfully");
+      },
+      error: function(error) {
+        console.error("Error adding the video URL to the database:", error);
+      }
+  });
+  }
 
 function onPlayerReady(event) {
 

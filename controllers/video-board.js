@@ -3,9 +3,10 @@ const { models: { Video } } = require('../models');
 module.exports = {
     create: async (req, res) => {
         const body = JSON.parse(req.body.video)
-        const user_id = req.params.id;
-        const { video_url, position, width, height } = body;
-        const newVideo = await Video.create({ videoURL:video_url, position, width, height, user_id })
+        const user_id = req.params.user_id;
+        const {video_url, position, width, height } = body;
+        //console.log("Create",body);
+        const newVideo = await Video.create({videoURL:video_url, position, width, height, user_id })
         return newVideo
       },
       
@@ -18,6 +19,7 @@ module.exports = {
       
       getVideoById: async (req, res) => {
         const { id } = req.body;
+        console.log("Get Video", id);
         
         const video = await Video.findByPk(id)
         return video
@@ -25,14 +27,22 @@ module.exports = {
       
       update: async (req, res) => {
         const body  = JSON.parse(req.body.videoBoard);
+        //console.log("Before", body);
         let allVids = await Video.findAll();
         /*console.log(allVids);
         console.log("Before",allVids);
         console.log("body",body);*/
-        const { id } = req.params;
+        const { user_id } = req.params;
+        const findUser = await Video.findOne({ where: { user_id } });
+        const id = findUser.id;
+        const findVideo = await module.exports.getVideoById({body: { id }});
+        //console.log(findVideo);
+        console.log(findVideo);
+        //const id = findVideo.id;
         const { video_url, position, width, height } = body;
-        const video = await Video.update({ videoURL:video_url, position, width, height }, { where: { user_id:id,videoURL:video_url } })
-         allVids = await Video.findAll();
+        //console.log("After", body);
+        const video = await Video.update({ videoURL:video_url, position, width, height }, { where: { user_id, videoURL:video_url } });
+        //AllVids = await Video.findAll();
         //console.log("After",allVids);
         return video
       },
