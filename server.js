@@ -1,9 +1,9 @@
-require('dotenv').config() //allows us to use .env file, keep at top
+require('dotenv').config(); //allows us to use .env file, keep at top
 
-const express =  require('express');
+const express = require('express');
 const app = express();
 const path = require('path');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 
 //set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -16,9 +16,9 @@ app.use(express.static(__dirname + '/public/js'));
 
 // Middleware
 
-var jsonParser = bodyParser.json()
+var jsonParser = bodyParser.json();
 // create application/x-www-form-urlencoded parser
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(jsonParser);
 app.use(urlencodedParser);
@@ -27,12 +27,12 @@ app.use(urlencodedParser);
 const videoBoard = require('./routes/video-board');
 
 app.get('/', (req, res) => {
-    res.render('index');
+  res.render('index');
 });
 
 const logger = (req, res, next) => {
-    console.log(req);
-    next();
+  console.log(req);
+  next();
 };
 
 app.use('/video-board', videoBoard);
@@ -41,7 +41,7 @@ app.use('/video-board', videoBoard);
 const db = require('./models');
 
 (async () => {
-    await db.sequelize.sync(/*{force:true}*/);
+  await db.sequelize.sync(/*{force:true}*/);
 })();
 
 //Port

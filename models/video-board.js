@@ -14,9 +14,6 @@ module.exports = (sequelize, DataTypes) => {
         get() {
             return this.getDataValue('videoURL').split(';')
         },
-        // set(val) {
-        //    this.setDataValue('videoURL',val.join(';'));
-        // },
     },
     position: {
       type: DataTypes.JSON,
