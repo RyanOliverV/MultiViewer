@@ -7,17 +7,17 @@ router.get('/', (req, res) => {
     user.create(req, res);
 });
 
-router.post('/:id', (req, res) => {
+router.post('/:user_id', (req, res) => {
     video.create(req, res);
 });
 
-router.get('/:id', (req, res) => {
-    const user_id = req.params.id;
+router.get('/:user_id', (req, res) => {
+    const user_id = req.params.user_id;
     res.render('video-board', { user_id });
 });
 
-router.put('/:id', async(req, res) => {
-    console.log("Router",req.body)
+router.put('/:user_id', async(req, res) => {
+    //console.log("Router",req.body)
     // const { id } = req.params;
     // const { video_url, position } = req.body;
     await video.update(req);
