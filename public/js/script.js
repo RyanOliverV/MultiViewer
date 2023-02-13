@@ -47,7 +47,6 @@ $(document).ready(async function() {
       contentType: 'application/x-www-form-urlencoded',
       url: `/video-board/${user_id}`,
       data: {video:JSON.stringify({
-        video_id: videoID,
         video_url:videoURL,
         position: outerDiv.style.transform,
         width: outerDiv.offsetWidth,

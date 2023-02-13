@@ -27,25 +27,20 @@ module.exports = {
       
       update: async (req, res) => {
         const body  = JSON.parse(req.body.videoBoard);
-        //console.log("Before", body);
-        let allVids = await Video.findAll();
-        /*console.log(allVids);
-        console.log("Before",allVids);
-        console.log("body",body);*/
         const { user_id } = req.params;
-        const findUser = await Video.findOne({ where: { user_id } });
-        const id = findUser.id;
-        const findVideo = await module.exports.getVideoById({body: { id }});
-        //console.log(findVideo);
-        console.log(findVideo);
-        //const id = findVideo.id;
         const { video_url, position, width, height } = body;
-        //console.log("After", body);
-        const video = await Video.update({ videoURL:video_url, position, width, height }, { where: { user_id, videoURL:video_url } });
-        //AllVids = await Video.findAll();
-        //console.log("After",allVids);
+        
+        // Find the video you want to update based on user_id
+        const findVideo = await Video.findOne({ where: { user_id } });
+    
+        // Get the id of the video
+        const id = findVideo.id;
+        console.log("ID:", id);
+        
+        // Update the video
+        const video = await Video.update({ videoURL:video_url, position, width, height }, { where: { id } });
         return video
-      },
+    },
       
       delete: async (req, res) => {
         const { id } = req.body;
