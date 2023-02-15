@@ -31,4 +31,9 @@ router.put('/:user_id', async (req, res) => {
   res.sendStatus(200);
 });
 
+router.delete('/videos/:user_id', async (req, res) => {
+  await video.delete(req);
+  res.sendStatus(300);
+});
+
 module.exports = router;

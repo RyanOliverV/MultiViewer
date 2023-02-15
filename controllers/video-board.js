@@ -52,7 +52,14 @@ module.exports = {
   },
 
   delete: async (req, res) => {
-    const { id } = req.body;
-    await Video.destroy({ where: { id } });
+    const body = JSON.parse(req.body.videoBoard);
+    const { user_id } = req.params;
+    const { video_url, position, width, height, id } = body;
+
+    const deleteVideo = await Video.destroy(
+      { videoURL: video_url, position, width, height },
+      { where: { id, user_id } }
+      );
+    return deleteVideo;
   },
 };
