@@ -17,10 +17,12 @@ $(document).ready(async function () {
     addVideo();
   });
 
-  function addVideo() {
+  async function addVideo() {
     let videoID = displayInput.value.split('watch?v=')[1];
     let videoURL = displayInput.value;
     let innerDiv = document.createElement('div');
+    let buttonId = ""
+
 
     innerDiv.className = 'inner';
     innerDiv.id = 'video-' + players.length;
@@ -29,22 +31,7 @@ $(document).ready(async function () {
     outerDiv.setAttribute('url', videoURL);
 
     outerDiv.style.transform = 'translate3d(100px, 100px, 0)';
-    outerDiv.appendChild(innerDiv);
-    containerDiv.appendChild(outerDiv);
-
-    player = new YT.Player('video-' + players.length, {
-      height: '100%',
-      width: '100%',
-      videoId: videoID,
-    });
-
-    player.addEventListener('onReady', onPlayerReady);
-    players.push(player);
-
-    init();
-
-    // Add the Ajax call here
-    $.ajax({
+    await $.ajax({
       type: 'POST',
       dataType: 'json',
       contentType: 'application/x-www-form-urlencoded',
@@ -59,12 +46,62 @@ $(document).ready(async function () {
       },
       success: function (response) {
         outerDiv.id = response.video.id;
+        let deleteButton = document.createElement('button');
+        deleteButton.textContent = "X";
+        deleteButton.style.cursor = "pointer";
+        deleteButton.id = response.video.id;
+        buttonId = response.video.id;
+        outerDiv.appendChild(deleteButton);
+        
         console.log('Video URL added to the database successfully');
       },
       error: function (error) {
         console.error('Error adding the video URL to the database:', error);
       },
     });
+    outerDiv.appendChild(innerDiv);
+    containerDiv.appendChild(outerDiv);
+
+    player = new YT.Player('video-' + players.length, {
+      height: '100%',
+      width: '100%',
+      videoId: videoID,
+    });
+
+    player.addEventListener('onReady', onPlayerReady);
+    players.push(player);
+    document.getElementById(buttonId).addEventListener("click",function(){deleteVideo(buttonId)})
+
+
+    init();
+
+    let videoWidth = outerDiv.offsetWidth;
+        let videoHeight = outerDiv.offsetHeight;
+        let videoId = outerDiv.id;
+        $.ajax({
+          type: 'PUT',
+          url: `/video-board/${user_id}`,
+          data: {
+            videoBoard: JSON.stringify({
+              id: videoId,
+              video_url: videoURL,
+              user_id,
+              position: 'translate3d(100px, 100px, 0)',
+              width: videoWidth,
+              height: videoHeight,
+            }),
+          },
+          success: function (data) {
+            console.log('Size sent to the server!');
+          },
+          error: function (error) {
+            console.error('Error adding the position to the database:', error);
+          },
+        });
+    
+
+    // Add the Ajax call here
+    
   }
 
   function onPlayerReady(event) {
@@ -179,7 +216,6 @@ $(document).ready(async function () {
         let videoWidth = event.target.offsetWidth;
         let videoHeight = event.target.offsetHeight;
         let videoId = event.target.id;
-        console.log(event.target.style.transform);
 
         // send x, y position to the server
         $.ajax({
@@ -232,17 +268,33 @@ $(document).ready(async function () {
   function renderVideo(video) {
     let videoID = video.videoURL[0].split('watch?v=')[1];
     let innerDiv = document.createElement('div');
-
     innerDiv.className = 'inner';
     innerDiv.id = 'video-' + players.length;
+
     let outerDiv = document.createElement('div');
     outerDiv.id = video.id;
     outerDiv.setAttribute('url', video.videoURL[0]);
     outerDiv.className = 'VideoStyle draggable resizable';
     outerDiv.style.height = video.height + 'px';
     outerDiv.style.width = video.width + 'px';
+
+    //Button creation
+    let deleteButton = document.createElement('button');
+    deleteButton.textContent = "X";
+    deleteButton.style.cursor = "pointer";
+    deleteButton.id = video.id
+
+
+
+
+
+    
+    outerDiv.appendChild(deleteButton);
     outerDiv.appendChild(innerDiv);
     containerDiv.appendChild(outerDiv);
+
+
+
     outerDiv.style.transform = video.position;
 
 
@@ -256,5 +308,31 @@ $(document).ready(async function () {
     players.push(player);
 
     init();
+
+    document.getElementById(video.id).addEventListener("click",function(){deleteVideo(video.id)})
+
   }
+
+   function deleteVideo (id){
+    $.ajax({
+        type: 'DELETE',
+        url: `/video-board/videos/${id}`,
+
+        success: function () {
+
+          const video = document.getElementById(id);
+          video.parentNode.removeChild(video);
+          alert("Video deleted succesfully");
+
+        },
+        error: function (error) {
+          console.error('Error deleting the video', error);
+          reject(error);
+        },
+      });
+
+  }
+
+
+  
 });
