@@ -24,16 +24,13 @@ router.get('/videos/:user_id', async (req, res) => {
 });
 
 router.put('/:user_id', async (req, res) => {
-  //console.log("Router",req.body)
-  // const { id } = req.params;
-  // const { video_url, position } = req.body;
   await video.update(req);
   res.sendStatus(200);
 });
 
-router.delete('/videos/:user_id', async (req, res) => {
+router.delete('/videos/:id', async (req, res) => {
   await video.delete(req);
-  res.sendStatus(300);
+  res.sendStatus(201);
 });
 
 module.exports = router;

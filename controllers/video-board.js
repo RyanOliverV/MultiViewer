@@ -7,7 +7,6 @@ module.exports = {
     const body = JSON.parse(req.body.video);
     const user_id = req.params.user_id;
     const { video_url, position, width, height } = body;
-    //console.log("Create",body);
     const newVideo = await Video.create({
       videoURL: video_url,
       position,
@@ -15,6 +14,7 @@ module.exports = {
       height,
       user_id,
     });
+    console.log(newVideo)
     return newVideo;
   },
 
@@ -44,22 +44,14 @@ module.exports = {
     const { video_url, position, width, height, id } = body;
 
     // Update the video
-    const video = await Video.update(
+    await Video.update(
       { videoURL: video_url, position, width, height },
       { where: { id, user_id } }
     );
-    return video;
   },
 
   delete: async (req, res) => {
-    const body = JSON.parse(req.body.videoBoard);
-    const { user_id } = req.params;
-    const { video_url, position, width, height, id } = body;
-
-    const deleteVideo = await Video.destroy(
-      { videoURL: video_url, position, width, height },
-      { where: { id, user_id } }
-      );
-    return deleteVideo;
+    const id = req.params.id
+    await Video.destroy({ where: { id } });
   },
 };
