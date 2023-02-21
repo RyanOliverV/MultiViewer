@@ -21,6 +21,7 @@ $(document).ready(async function () {
     let videoID = displayInput.value.split('watch?v=')[1];
     let videoURL = displayInput.value;
     let innerDiv = document.createElement('div');
+    let deleteButton = document.createElement('button');
     let buttonId = ""
 
 
@@ -29,8 +30,8 @@ $(document).ready(async function () {
     let outerDiv = document.createElement('div');
     outerDiv.className = 'VideoStyle draggable resizable';
     outerDiv.setAttribute('url', videoURL);
-
     outerDiv.style.transform = 'translate3d(100px, 100px, 0)';
+
     await $.ajax({
       type: 'POST',
       dataType: 'json',
@@ -46,21 +47,25 @@ $(document).ready(async function () {
       },
       success: function (response) {
         outerDiv.id = response.video.id;
-        let deleteButton = document.createElement('button');
-        deleteButton.textContent = "X";
+        deleteButton.innerHTML = "<i class='fa-solid fa-trash-can'></i>";
         deleteButton.style.cursor = "pointer";
+        deleteButton.className = "delete-button";
         deleteButton.id = response.video.id;
         buttonId = response.video.id;
-        outerDiv.appendChild(deleteButton);
-        
+        deleteButton.addEventListener("click",function(){
+          deleteVideo(buttonId)
+        })
+      
         console.log('Video URL added to the database successfully');
+
+        outerDiv.appendChild(deleteButton);
+        outerDiv.appendChild(innerDiv);
+        containerDiv.appendChild(outerDiv);
       },
       error: function (error) {
         console.error('Error adding the video URL to the database:', error);
       },
     });
-    outerDiv.appendChild(innerDiv);
-    containerDiv.appendChild(outerDiv);
 
     player = new YT.Player('video-' + players.length, {
       height: '100%',
@@ -70,12 +75,10 @@ $(document).ready(async function () {
 
     player.addEventListener('onReady', onPlayerReady);
     players.push(player);
-    document.getElementById(buttonId).addEventListener("click",function(){deleteVideo(buttonId)})
-
 
     init();
 
-    let videoWidth = outerDiv.offsetWidth;
+        let videoWidth = outerDiv.offsetWidth;
         let videoHeight = outerDiv.offsetHeight;
         let videoId = outerDiv.id;
         $.ajax({
@@ -98,9 +101,6 @@ $(document).ready(async function () {
             console.error('Error adding the position to the database:', error);
           },
         });
-    
-
-    // Add the Ajax call here
     
   }
 
@@ -199,6 +199,7 @@ $(document).ready(async function () {
         });
       },
     });
+
     // make the element draggable
     Draggable.create('.draggable', {
       onPress: function () {
@@ -217,7 +218,7 @@ $(document).ready(async function () {
         let videoHeight = event.target.offsetHeight;
         let videoId = event.target.id;
 
-        // send x, y position to the server
+        // send video position to the server
         $.ajax({
           type: 'PUT',
           url: `/video-board/${user_id}`,
@@ -262,9 +263,12 @@ $(document).ready(async function () {
       });
     });
   }
+
   window.YT.ready(function () {
     preLoad();
+
   });
+
   function renderVideo(video) {
     let videoID = video.videoURL[0].split('watch?v=')[1];
     let innerDiv = document.createElement('div');
@@ -283,20 +287,12 @@ $(document).ready(async function () {
     deleteButton.textContent = "X";
     deleteButton.style.cursor = "pointer";
     deleteButton.id = video.id
-
-
-
-
-
     
     outerDiv.appendChild(deleteButton);
     outerDiv.appendChild(innerDiv);
     containerDiv.appendChild(outerDiv);
 
-
-
     outerDiv.style.transform = video.position;
-
 
     player = new YT.Player('video-' + players.length, {
       height: '100%',
@@ -332,7 +328,6 @@ $(document).ready(async function () {
       });
 
   }
-
 
   
 });
