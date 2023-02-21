@@ -49,7 +49,6 @@ $(document).ready(async function () {
         outerDiv.id = response.video.id;
         deleteButton.innerHTML = "<i class='fa-solid fa-trash-can'></i>";
         deleteButton.style.cursor = "pointer";
-        deleteButton.className = "delete-button";
         deleteButton.id = response.video.id;
         buttonId = response.video.id;
         deleteButton.addEventListener("click",function(){
@@ -282,12 +281,17 @@ $(document).ready(async function () {
     outerDiv.style.height = video.height + 'px';
     outerDiv.style.width = video.width + 'px';
 
-    //Button creation
+    //Create Button
     let deleteButton = document.createElement('button');
-    deleteButton.textContent = "X";
+    deleteButton.innerHTML = "<i class='fa-solid fa-trash-can'></i>";
     deleteButton.style.cursor = "pointer";
-    deleteButton.id = video.id
-    
+    deleteButton.id = video.id;
+    buttonId = video.id;
+
+    deleteButton.addEventListener("click",function(){
+      deleteVideo(buttonId)
+    });
+
     outerDiv.appendChild(deleteButton);
     outerDiv.appendChild(innerDiv);
     containerDiv.appendChild(outerDiv);
