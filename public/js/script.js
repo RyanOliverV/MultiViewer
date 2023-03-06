@@ -135,10 +135,10 @@ $(document).ready(async function () {
       }
 
       if (isMuted) {
-        soundButton.innerHTML = "<i class='fa-solid fa-volume-xmark'></i>";
+        soundButton.innerHTML = "<i class='fa-solid fa-volume-high'></i>";
         isMuted = false;
       } else {
-        soundButton.innerHTML = "<i class='fa-solid fa-volume-high'></i>";
+        soundButton.innerHTML = "<i class='fa-solid fa-volume-xmark'></i>";
         isMuted = true;
       }
     });
