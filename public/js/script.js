@@ -318,9 +318,7 @@ $(document).ready(async function () {
 
       success: function () {
         const video = document.getElementById(id);
-        console.log("Before ", video);
         video.parentNode.removeChild(video);
-        console.log("After ", video.parentNode.removeChild(video));
         alert("Video deleted succesfully");
       },
       error: function (error) {
