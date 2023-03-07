@@ -27,7 +27,7 @@ $(document).ready(async function () {
     innerDiv.className = "inner";
     innerDiv.id = "video-" + players.length;
     let outerDiv = document.createElement("div");
-    outerDiv.className = "VideoStyle draggable resizable";
+    outerDiv.className = "draggable resizable";
     outerDiv.setAttribute("url", videoURL);
     outerDiv.style.transform = "translate3d(100px, 100px, 0)";
 
@@ -35,7 +35,7 @@ $(document).ready(async function () {
       type: "POST",
       dataType: "json",
       contentType: "application/x-www-form-urlencoded",
-      url: `/video-board/${user_id}`,
+      url: `/video-board/${video_board_id}`,
       data: {
         video: JSON.stringify({
           video_url: videoURL,
@@ -81,12 +81,12 @@ $(document).ready(async function () {
     let videoId = outerDiv.id;
     $.ajax({
       type: "PUT",
-      url: `/video-board/${user_id}`,
+      url: `/video-board/${video_board_id}`,
       data: {
         videoBoard: JSON.stringify({
           id: videoId,
           video_url: videoURL,
-          user_id,
+          video_board_id,
           position: "translate3d(100px, 100px, 0)",
           width: videoWidth,
           height: videoHeight,
@@ -176,12 +176,12 @@ $(document).ready(async function () {
         let videoId = event.target.id;
         $.ajax({
           type: "PUT",
-          url: `/video-board/${user_id}`,
+          url: `/video-board/${video_board_id}`,
           data: {
             videoBoard: JSON.stringify({
               id: videoId,
               video_url: videoURL,
-              user_id,
+              video_board_id,
               position: videoPosition,
               width: videoWidth,
               height: videoHeight,
@@ -218,12 +218,12 @@ $(document).ready(async function () {
         // send video position to the server
         $.ajax({
           type: "PUT",
-          url: `/video-board/${user_id}`,
+          url: `/video-board/${video_board_id}`,
           data: {
             videoBoard: JSON.stringify({
               video_url: videoURL,
               id: videoId,
-              user_id,
+              video_board_id,
               position: videoPosition,
               width: videoWidth,
               height: videoHeight,
@@ -244,11 +244,11 @@ $(document).ready(async function () {
     return new Promise((resolve, reject) => {
       $.ajax({
         type: "GET",
-        url: `/video-board/videos/${user_id}`,
+        url: `/video-board/videos/${video_board_id}`,
 
         success: function (data) {
           console.log(data);
-          const videos = data.videos;
+          const videos = data.findVideos;
           videos.map((v) => renderVideo(v));
 
           resolve(data);
@@ -274,7 +274,7 @@ $(document).ready(async function () {
     let outerDiv = document.createElement("div");
     outerDiv.id = video.id;
     outerDiv.setAttribute("url", video.videoURL[0]);
-    outerDiv.className = "VideoStyle draggable resizable";
+    outerDiv.className = "draggable resizable";
     outerDiv.style.height = video.height + "px";
     outerDiv.style.width = video.width + "px";
 
@@ -318,7 +318,9 @@ $(document).ready(async function () {
 
       success: function () {
         const video = document.getElementById(id);
+        console.log("Before ", video);
         video.parentNode.removeChild(video);
+        console.log("After ", video.parentNode.removeChild(video));
         alert("Video deleted succesfully");
       },
       error: function (error) {

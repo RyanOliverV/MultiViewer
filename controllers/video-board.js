@@ -1,57 +1,14 @@
-const {
-  models: { Video },
-} = require('../models');
+const { models: { VideoBoard } } = require('../models');
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
-  create: async (req, res) => {
-    const body = JSON.parse(req.body.video);
-    const user_id = req.params.user_id;
-    const { video_url, position, width, height } = body;
-    const newVideo = await Video.create({
-      videoURL: video_url,
-      position,
-      width,
-      height,
-      user_id,
-    });
-    console.log(newVideo)
-    return newVideo;
-  },
 
-  getAllVideos: async (req, res) => {
-    const videos = await Video.findAll();
-    //console.log(videos);
-    return videos;
-  },
+    create: async (req, res) => {
+            const video_board_id = uuidv4();
 
-  getVideoById: async (req, res) => {
-    const { id } = req.body;
-    console.log('Get Video', id);
-
-    const video = await Video.findByPk(id);
-    return video;
-  },
-
-  getVideoByUserId: async (user_id) => {
-    const videos = await Video.findAll({ where: { user_id } });
-
-    return videos;
-  },
-
-  update: async (req, res) => {
-    const body = JSON.parse(req.body.videoBoard);
-    const { user_id } = req.params;
-    const { video_url, position, width, height, id } = body;
-
-    // Update the video
-    await Video.update(
-      { videoURL: video_url, position, width, height },
-      { where: { id, user_id } }
-    );
-  },
-
-  delete: async (req, res) => {
-    const id = req.params.id
-    await Video.destroy({ where: { id } });
-  },
-};
+            await VideoBoard.create({
+                video_board_id
+            });
+            res.redirect(`/video-board/${video_board_id}`);
+        }
+    }
