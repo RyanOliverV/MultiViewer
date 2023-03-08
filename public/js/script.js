@@ -50,6 +50,7 @@ $(document).ready(async function () {
         deleteButton.style.cursor = "pointer";
         deleteButton.id = response.video.id;
         buttonId = response.video.id;
+
         deleteButton.addEventListener("click", function () {
           deleteVideo(buttonId);
         });
@@ -285,9 +286,9 @@ $(document).ready(async function () {
     deleteButton.id = video.id;
     buttonId = video.id;
 
-    deleteButton.addEventListener("click", function () {
+    /*deleteButton.addEventListener("click", function () {
       deleteVideo(buttonId);
-    });
+    });*/
 
     outerDiv.appendChild(deleteButton);
     outerDiv.appendChild(innerDiv);

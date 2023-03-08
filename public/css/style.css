@@ -58,15 +58,6 @@ iframe {
   border-top: 1px solid black;
 }
 
-input:not([type="submit"]) {
-  width: 250px;
-  height: 25px;
-  border-radius: 5px;
-  border: transparent;
-  padding: 2px 0 2px 5px;
-  margin: 10px 0;
-}
-
 input[type="submit"] {
   font-size: 1.2em;
   border: none;
@@ -236,21 +227,43 @@ input[type="submit"] {
   color: #f9f8f8;
 }
 
+input:not([type="submit"]) {
+  font-family: 'Tiro Devanagari Marathi', sans-serif;
+  font-size: 1em;
+  font-weight: 400;
+  background-color: #252636;
+  box-shadow: 0 0 .4vw #1e1f2c, 0 0 0 .15vw transparent;
+  border-radius: 0.4vw;
+  border: none;
+  outline: none;
+  padding: 0.4vw;
+  max-width: 190px;
+  transition: .4s;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+::placeholder {
+  color: #bcd8c1;
+  opacity: 0.5;
+}
+
 .video-functions button  {
   font-family: 'Tiro Devanagari Marathi', sans-serif;
   font-size: 1em;
   font-weight: 400;
-  color: #101117;
-  background: #bcd8c1;
-  border: 2px solid #101117;
-  padding: 10px 15px;
-  border-radius: 10px;
-  box-shadow: 2px 2px #101117;
+  padding: 0.4em;
+  border: 0px solid transparent;
+  border-radius: 0.4em;
+  color: #bcd8c1;
+  background-color: #252636;
+  transition: all 0.2s linear;
   cursor: pointer;
-  margin-right: 5px;
+  box-shadow: 0 0 .4vw #1e1f2c, 0 0 0 .15vw transparent;
+  margin-right: 2px;
   }
 
   .video-functions button:hover {
     box-shadow: none;
-    transform: translate(3px, 3px);
+    transform: translate(2px, 2px);
   }  
