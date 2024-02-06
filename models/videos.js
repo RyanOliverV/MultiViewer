@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
 
     video_board_id: {
     type: DataTypes.UUID,
+    foreignKey: true
   },
 });
     return Video;

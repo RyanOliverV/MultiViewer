@@ -6,7 +6,7 @@ body {
 }
 
 .draggable {
-  box-shadow: 0 0 4px 0 #000;
+  /* box-shadow: 0 0 4px 0 #000; */
   position: absolute;
   top: 0;
   left: 0;
@@ -14,7 +14,7 @@ body {
   width: 30vw;
   min-height: 50px;
   height: 50vh;
-  background: #931f1d;
+  background: #bcd8c1;
   padding-top: 5px;
 }
 
@@ -23,7 +23,7 @@ body {
   top: -0.5%;
   float: right;
   font-size: 0.8em;
-  background-color: #931f1d;
+  background-color: #bcd8c1;
   border: none;
 }
 
@@ -227,7 +227,7 @@ input[type="submit"] {
   color: #f9f8f8;
 }
 
-input:not([type="submit"]) {
+.video-functions input:not([type="submit"]) {
   font-family: 'Tiro Devanagari Marathi', sans-serif;
   font-size: 1em;
   font-weight: 400;
@@ -267,3 +267,52 @@ input:not([type="submit"]) {
     box-shadow: none;
     transform: translate(2px, 2px);
   }  
+
+  .user-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .user-form h1 {
+    font-family: 'Tiro Devanagari Marathi', sans-serif;
+    font-size: 2em;
+    font-weight: 400;
+    color: #f9f8f8;
+    margin-bottom: 30px;
+  }
+
+  .user-form input:not([type="submit"]) {
+    font-family: 'Tiro Devanagari Marathi', sans-serif;
+    font-size: 1em;
+    font-weight: 400;
+    background-color: #252636;
+    box-shadow: 0 0 .4vw #1e1f2c, 0 0 0 .15vw transparent;
+    border-radius: 0.4vw;
+    border: none;
+    outline: none;
+    padding: 0.4vw;
+    max-width: 190px;
+    transition: .4s;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom:10px;
+    display: block;
+  }
+
+  .user-form label {
+    font-family: 'Tiro Devanagari Marathi', sans-serif;
+    font-size: 1em;
+    font-weight: 400;
+    color: #f9f8f8;
+    margin-bottom:10px;
+    display:inline-block;
+  }
+
+  .user-form a {
+    font-family: 'Tiro Devanagari Marathi', sans-serif;
+    font-size: 0.8em;
+    font-weight: 400;
+    color: #f9f8f8;
+  }

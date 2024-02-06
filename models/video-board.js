@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
         video_board_id: {
             type: DataTypes.STRING,
             allowNull: false,
+            primaryKey: true
           },
     }, 
     {

@@ -3,6 +3,7 @@ require('dotenv').config(); //allows us to use .env file, keep at top
 const express = require('express');
 const app = express();
 const path = require('path');
+const bcrypt = require('bcrypt');
 var bodyParser = require('body-parser');
 
 //set the view engine to ejs
@@ -25,6 +26,7 @@ app.use(urlencodedParser);
 
 // Routes
 const videoBoard = require('./routes/video-board');
+const user = require('./routes/user');
 
 app.get('/', (req, res) => {
   res.render('index');
@@ -37,11 +39,13 @@ const logger = (req, res, next) => {
 
 app.use('/video-board', videoBoard);
 
+app.use(user);
+
 //Database
 const db = require('./models');
 
 (async () => {
-  await db.sequelize.sync(/*{force:true}*/);
+  await db.sequelize.sync({force:true});
 })();
 
 //Port
