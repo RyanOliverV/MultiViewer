@@ -6,35 +6,18 @@ body {
 }
 
 #container {
-  border: 2px solid white;
+  display: block;
+  position: relative;
   width: 90vw;
   height: 90vh;
-  margin: 0;
-  padding: 0;
+  margin: 4vh auto;
+  border: 2px solid;
 }
 
-/* make iframes in dragged container ignore pointer events */
-#container.dragging iframe {
-  pointer-events: none;
-}
-/* .draggable {
-  position: absolute;
-  top: 0;
-  left: 0;
-  min-width: 50px;
-  width: 30vw;
-  min-height: 50px;
-  height: 50vh;
-  background: #bcd8c1;
-  padding-top: 30px;
-  cursor: grab;
-} */
-
-.resizable {
+.video-container {
   position: absolute;
   z-index: 9;
   background-color: #bcd8c1;
-  border: 1px solid #d3d3d3;
   text-align: center;
   padding: 0;
   width: 400px;
@@ -45,55 +28,43 @@ body {
   overflow: auto;
 }
 
+/* make iframes in dragged container ignore pointer events */
+.video-container.dragging iframe {
+  pointer-events: none;
+}
+
 .drag-handle {
-  padding: 2%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 6%;
   width: 100%;
   cursor: move;
-  z-index: 10;
   background-color: #bcd8c1;
   color: #fff;
 }
 
-.drag-handle button {
-  position: absolute;
-  margin: auto;
-  top: -0.1%;
-  left: 93%;
-  font-size: 0.7em;
-  background-color: #bcd8c1;
-  border: none;
-}
-
-/* .ui-resizable-resizing::after {
-  content: "";
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 200%;
-  width: 200%;
-  margin: -50% -50%;
-} */
-
-.handleBar span {
-  display: block;
-  position: absolute;
-  width: calc(100% - 28px);
-  height: calc(100% - 8px);
-  overflow: hidden;
-}
-
 .video {
-  width: 100%;
-  height: 90%;
+  width: 94%;
+  height: 88%;
+  background-color: rgb(145, 153, 150);
+  margin: auto;
 }
 
 iframe {
   width: 100%;
   height: 100%;
-  border: none;
-  border-top: 1px solid black;
 }
+
+.drag-handle button {
+  font-size: 0.7em;
+  background-color: #bcd8c1;
+  color: antiquewhite;
+  border: none;
+  margin: 5px;
+}
+
+
 
 input[type="submit"] {
   font-size: 1.2em;

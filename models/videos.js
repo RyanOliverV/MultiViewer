@@ -18,6 +18,16 @@ module.exports = (sequelize, DataTypes) => {
     position: {
       type: DataTypes.JSON,
       allowNull: false
+    },     
+    
+    top: {
+      type: DataTypes.JSON,
+      allowNull: false
+    },
+
+    left: {
+      type: DataTypes.JSON,
+      allowNull: false
     },
 
     width: {

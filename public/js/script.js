@@ -1,7 +1,7 @@
 $(document).ready(async function () {
   let displayInput = document.getElementById("video-url");
   let displayButton = document.getElementById("display-video");
-  let containerDiv = document.getElementById("video-container");
+  let containerDiv = document.getElementById("container");
   let syncInput = document.getElementById("sync-time");
   let player;
   let players = [];
@@ -29,7 +29,9 @@ $(document).ready(async function () {
     let outerDiv = document.createElement("div");
     outerDiv.className = "draggable resizable";
     outerDiv.setAttribute("url", videoURL);
-    outerDiv.style.transform = "translate3d(100px, 100px, 0)";
+  //   outerDiv.style.transform = "translate3d(100px, 100px, 0)";
+    outerDiv.style.top = "100px";
+    outerDiv.style.left = "100px";
 
     await $.ajax({
       type: "POST",
@@ -40,6 +42,8 @@ $(document).ready(async function () {
         video: JSON.stringify({
           video_url: videoURL,
           position: "translate3d(100px, 100px, 0)",
+          top: "100px",
+          left: "100px",
           width: outerDiv.offsetWidth,
           height: outerDiv.offsetHeight,
         }),
@@ -162,62 +166,56 @@ $(document).ready(async function () {
     return seconds;
   }
 
-  function init() {
-    // the ui-resizable-handles are added here
-    $(".resizable").resizable();
-    // makes GSAP Draggable avoid clicks on the resize handles
-    $(".ui-resizable-handle").attr("data-clickable", true);
+  function makeDraggable(element) {
+      var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  
+      element.addEventListener('mousedown', dragMouseDown);
+  
+      function dragMouseDown(e) {
+          e.preventDefault();
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          document.addEventListener('mouseup', closeDragElement);
+          document.addEventListener('mousemove', elementDrag);
+      }
+  
+      function elementDrag(e) {
+          e.preventDefault();
+          pos1 = pos3 - e.clientX;
+          pos2 = pos4 - e.clientY;
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          element.style.top = (element.offsetTop - pos2) + "px";
+          element.style.left = (element.offsetLeft - pos1) + "px";
 
-    $(".resizable").resizable({
-      stop: function (event, ui) {
-        let videoURL = event.target.getAttribute("url");
-        let videoPosition = event.target.style.transform;
-        let videoWidth = event.target.offsetWidth;
-        let videoHeight = event.target.offsetHeight;
-        let videoId = event.target.id;
-        $.ajax({
-          type: "PUT",
-          url: `/video-board/${video_board_id}`,
-          data: {
-            videoBoard: JSON.stringify({
-              id: videoId,
-              video_url: videoURL,
-              video_board_id,
-              position: videoPosition,
-              width: videoWidth,
-              height: videoHeight,
-            }),
-          },
-          success: function (data) {
-            console.log("Size sent to the server!");
-          },
-          error: function (error) {
-            console.error("Error adding the position to the database:", error);
-          },
-        });
-      },
-    });
-
-    // make the element draggable
-    Draggable.create(".draggable", {
-      onPress: function () {
-        $(this.target).addClass("ui-resizable-resizing");
-      },
-      onRelease: function () {
-        $(this.target).removeClass("ui-resizable-resizing");
-      },
-      onDragEnd: function (event) {
-        let x = this.x,
-          y = this.y;
-
-        let videoURL = event.target.getAttribute("url");
-        let videoPosition = event.target.style.transform;
-        let videoWidth = event.target.offsetWidth;
-        let videoHeight = event.target.offsetHeight;
-        let videoId = event.target.id;
-
-        // send video position to the server
-        $.ajax({
+          // element.style.transform = `translate3d(${newLeft}px, ${newTop}px, 0)`;
+  
+          console.log("Dragged - Left:", element.style.left, "Top:", element.style.top);
+      }
+  
+      function closeDragElement() {
+          document.removeEventListener('mouseup', closeDragElement);
+          document.removeEventListener('mousemove', elementDrag);
+  
+          let x = parseInt(element.style.left);
+          let y = parseInt(element.style.top);
+  
+          // Remove the "px" suffix by parsing as integers
+          console.log("CloseDrag - Left:", x, "Top:", y);
+  
+          let videoURL = element.getAttribute("url");
+          let videoPosition = `translate3d(${x}px, ${y}px, 0)`;
+          let top = element.style.top;
+          let left = element.style.left;
+          let videoWidth = element.offsetWidth;
+          let videoHeight = element.offsetHeight;
+          let videoId = element.id;
+  
+          // Send video position to the server
+          // Assuming you have the variable video_board_id defined somewhere
+          console.log("video_board_id:", video_board_id);
+      // send video position to the server
+      $.ajax({
           type: "PUT",
           url: `/video-board/${video_board_id}`,
           data: {
@@ -226,12 +224,59 @@ $(document).ready(async function () {
               id: videoId,
               video_board_id,
               position: videoPosition,
+              top: top,
+              left: left,
               width: videoWidth,
               height: videoHeight,
             }),
           },
           success: function (data) {
             console.log("Position sent to the server!");
+          },
+          error: function (error) {
+            console.error("Error adding the position to the database:", error);
+          },
+        });
+      }
+  }
+
+  function init() {
+    // the ui-resizable-handles are added here
+    $(".resizable").resizable();
+    // makes GSAP Draggable avoid clicks on the resize handles
+    $(".ui-resizable-handle").attr("data-clickable", true);
+
+    const draggableElements = document.querySelectorAll('.draggable');
+    draggableElements.forEach(element => {
+        makeDraggable(element);
+    });
+
+    $(".resizable").resizable({
+      stop: function (event, ui) {
+        let videoURL = event.target.getAttribute("url");
+      //   let videoPosition = event.target.style.transform;
+        let top = event.style.top;
+        let left = event.style.left;
+        let videoWidth = event.target.offsetWidth;
+        let videoHeight = event.target.offsetHeight;
+        let videoId = event.target.id;
+        $.ajax({
+          type: "PUT",
+          url: `/video-board/${video_board_id}`,
+          data: {
+            videoBoard: JSON.stringify({
+              id: videoId,
+              video_url: videoURL,
+              video_board_id,
+              position: videoPosition,
+              top: top,
+              left: left,
+              width: videoWidth,
+              height: videoHeight,
+            }),
+          },
+          success: function (data) {
+            console.log("Size sent to the server!");
           },
           error: function (error) {
             console.error("Error adding the position to the database:", error);
@@ -267,50 +312,48 @@ $(document).ready(async function () {
   });
 
   function renderVideo(video) {
-    let videoID = video.videoURL[0].split("watch?v=")[1];
-    let innerDiv = document.createElement("div");
-    innerDiv.className = "inner";
-    innerDiv.id = "video-" + players.length;
-
-    let outerDiv = document.createElement("div");
-    outerDiv.id = video.id;
-    outerDiv.setAttribute("url", video.videoURL[0]);
-    outerDiv.className = "draggable resizable";
-    outerDiv.style.height = video.height + "px";
-    outerDiv.style.width = video.width + "px";
-
-    //Create Button
-    let deleteButton = document.createElement("button");
-    deleteButton.innerHTML = "<i class='fa-solid fa-xmark'></i>";
-    deleteButton.style.cursor = "pointer";
-    deleteButton.id = video.id;
-    buttonId = video.id;
-
-    /*deleteButton.addEventListener("click", function () {
-      deleteVideo(buttonId);
-    });*/
-
-    outerDiv.appendChild(deleteButton);
-    outerDiv.appendChild(innerDiv);
-    containerDiv.appendChild(outerDiv);
-
-    outerDiv.style.transform = video.position;
-
-    player = new YT.Player("video-" + players.length, {
-      height: "100%",
-      width: "100%",
-      videoId: videoID,
-    });
-
-    player.addEventListener("onReady", onPlayerReady);
-    players.push(player);
-
-    init();
-
-    document.getElementById(video.id).addEventListener("click", function () {
-      deleteVideo(video.id);
-    });
-  }
+      let videoID = video.videoURL[0].split("watch?v=")[1];
+      let innerDiv = document.createElement("div");
+      innerDiv.className = "inner";
+      innerDiv.id = "video-" + players.length;
+    
+      let outerDiv = document.createElement("div");
+      outerDiv.id = video.id;
+      outerDiv.setAttribute("url", video.videoURL[0]);
+      outerDiv.className = "draggable resizable";
+      outerDiv.style.height = video.height + "px";
+      outerDiv.style.width = video.width + "px";
+    
+      // Create Button
+      let deleteButton = document.createElement("button");
+      deleteButton.innerHTML = "<i class='fa-solid fa-xmark'></i>";
+      deleteButton.style.cursor = "pointer";
+      deleteButton.id = video.id;
+    
+      deleteButton.addEventListener("click", function (event) {
+        // Prevent the event from bubbling up to the outerDiv
+        event.stopPropagation();
+        deleteVideo(video.id);
+      });
+    
+      outerDiv.appendChild(deleteButton);
+      outerDiv.appendChild(innerDiv);
+      containerDiv.appendChild(outerDiv);
+    
+      outerDiv.style.top = video.top;
+      outerDiv.style.left = video.left;
+    
+      player = new YT.Player("video-" + players.length, {
+        height: "100%",
+        width: "100%",
+        videoId: videoID,
+      });
+    
+      player.addEventListener("onReady", onPlayerReady);
+      players.push(player);
+    
+      init();
+    }
 
   function deleteVideo(id) {
     $.ajax({

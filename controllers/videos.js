@@ -6,10 +6,12 @@ module.exports = {
   create: async (req, res) => {
     const body = JSON.parse(req.body.video);
     const video_board_id = req.params.video_board_id;
-    const { video_url, position, width, height } = body;
+    const { video_url, position, top, left, width, height } = body;
     const newVideo = await Video.create({
       videoURL: video_url,
       position,
+      top,
+      left,
       width,
       height,
       video_board_id,
@@ -39,11 +41,11 @@ module.exports = {
   update: async (req, res) => {
     const body = JSON.parse(req.body.videoBoard);
     const { video_board_id } = req.params;
-    const { video_url, position, width, height, id } = body;
+    const { video_url, position, top, left, width, height, id } = body;
 
     // Update the video
     await Video.update(
-      { videoURL: video_url, position, width, height },
+      { videoURL: video_url, position, top, left, width, height },
       { where: { id, video_board_id } }
     );
   },
